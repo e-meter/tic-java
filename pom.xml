@@ -4,19 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- The Basics -->
     <groupId>emeter</groupId>
     <artifactId>tic-java</artifactId>
     <version>1.0-SNAPSHOT</version>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <junit.version>4.13.2</junit.version>
-        <jacoco.version>0.8.11</jacoco.version>
-        <maven-site.version>3.12.0</maven-site.version>
-        <maven-javadoc.version>3.6.3</maven-javadoc.version>
-    </properties>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
@@ -27,6 +19,19 @@
         </dependency>
     </dependencies>
 
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <junit.version>4.13.2</junit.version>
+        <jacoco.version>0.8.11</jacoco.version>
+        <maven-site.version>3.12.0</maven-site.version>
+        <maven-javadoc.version>3.6.3</maven-javadoc.version>
+        <maven-assembly.version>3.7.1</maven-assembly.version>
+        <maven-reports.version>3.5.0</maven-reports.version>
+    </properties>
+
+    <!-- Build Settings -->
     <build>
         <plugins>
             <plugin>
@@ -53,11 +58,71 @@
                 <artifactId>maven-site-plugin</artifactId>
                 <version>${maven-site.version}</version>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>${maven-assembly.version}</version>
+                <executions>
+                    <execution>
+                        <id>make-bin-package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>${project.basedir}/src/assembly/bin.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>make-src-package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>${project.basedir}/src/assembly/src.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>make-doc-package</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>${project.basedir}/src/assembly/doc.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>make-complete-package</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>${project.basedir}/src/assembly/all.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
     <reporting>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>${maven-reports.version}</version>
+            </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -77,5 +142,43 @@
             </plugin>
         </plugins>
     </reporting>
+
+    <!-- More Project Information -->
+    <name>${project.artifactId}</name>
+    <description>
+        This project is a library , written in Java, used to handle communication with french electric meter using proprietary protocol
+        called Télé Information Client (TIC)
+    </description>
+    <url>https://github.com/e-meter/tic-java</url>
+    <inceptionYear>2024</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>GPL-3.0-or-later</name>
+            <url>LICENSE</url>
+            <distribution>repo</distribution>
+            <comments>GNU General Public License v3.0</comments>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>e-meter</id>
+            <email>emeter@free.fr</email>
+            <url>https://github.com/e-meter</url>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <!-- Environment Settings -->
+    <scm>
+        <connection>scm:git:https://github.com/e-meter/tic-java.git</connection>
+        <developerConnection>scm:git:git@github.com:e-meter/tic-java.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>${project.url}</url>
+    </scm>
 
 </project>
